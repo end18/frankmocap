@@ -1,0 +1,2 @@
+python -m demo.demo_frankmocap --input_path /home/yonghee/AI/input/ --out_dir ./output/ --save_pred_pkl --save_mesh --save_bbox_output
+

@@ -231,7 +231,8 @@ def save_pred_to_pkl(
     saved_data['body_bbox_list'] = body_bbox_list
     saved_data['hand_bbox_list'] = hand_bbox_list
     saved_data['save_mesh'] = args.save_mesh
-
+    if args.save_mesh == True :
+        print( "args.save_mesh is True" )
     saved_data['pred_output_list'] = list()
     num_subject = len(hand_bbox_list)
     for s_id in range(num_subject):
@@ -270,6 +271,18 @@ def save_pred_to_pkl(
                                     pred_output[pred_key].astype(np.float16)
                             else:
                                 saved_pred_output[pred_key] = pred_output[pred_key]
+            
+            if 'pred_vertices_smpl' in saved_pred_output :
+                img_name = osp.basename(image_path)
+                record = img_name.split('.')
+                obj_name = f"{'.'.join(record[:-1])}_prediction_result.obj"
+                obj_name = ('%d_%s') % (s_id, obj_name)
+                obj_path = osp.join(args.out_dir, obj_name)
+                with open(obj_path, 'w') as fp:
+                    for v in saved_pred_output['pred_vertices_smpl']:
+                        fp.write('v %f %f %f\n' % (v[0], v[1], v[2]))
+                    for f in saved_pred_output['faces']:
+                        fp.write('f %d %d %d\n' % (f[0], f[1], f[2]))
 
         saved_data['pred_output_list'].append(saved_pred_output)
 
