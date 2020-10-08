@@ -281,7 +281,7 @@ def save_pred_to_pkl(
                 with open(obj_path, 'w') as fp:
                     for v in saved_pred_output['pred_vertices_smpl']:
                         fp.write('v %f %f %f\n' % (v[0], v[1], v[2]))
-                    for f in saved_pred_output['faces']:
+                    for f in saved_pred_output['faces'] + 1:
                         fp.write('f %d %d %d\n' % (f[0], f[1], f[2]))
 
         saved_data['pred_output_list'].append(saved_pred_output)
