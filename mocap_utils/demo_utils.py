@@ -296,10 +296,14 @@ def save_pred_to_pkl(
     print(f"Prediction saved: {pkl_path}")
  
 
-def save_res_img(out_dir, image_path, res_img):
+def save_res_img(out_dir, image_path, res_img, pose_img):
     img_name = osp.basename(image_path)
     res_img_path = osp.join(out_dir, img_name)
     gnu.make_subdir(res_img_path)
     cv2.imwrite(res_img_path, res_img)
+    pose_img_name = 'pose_' + img_name
+    pose_img_path =  osp.join( osp.dirname(res_img_path) , pose_img_name)
+    print(f"Pose image saved : {pose_img_path}")
+    cv2.imwrite(pose_img_path , pose_img)    
     print(f"Visualization saved: {res_img_path}")
 

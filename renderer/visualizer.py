@@ -87,8 +87,12 @@ class Visualizer(object):
         vis_body_pose = True,
         vis_hand_bbox = True,
     ):
-         # init
+         # init        
         res_img = input_img.copy()
+        pose_img = np.ones(input_img.shape, dtype=np.uint8)*0       #generate blank image
+        pose_r, pose_g, pose_b = cv2.split(pose_img)
+        pose_g = np.ones(pose_g.shape, dtype=np.uint8)*255
+        pose_img = cv2.merge((pose_r, pose_g, pose_b))
 
         # draw raw hand bboxes
         if raw_hand_bboxes is not None and vis_raw_hand_bbox:
@@ -97,7 +101,7 @@ class Visualizer(object):
 
         # draw 2D Pose
         if body_pose_list is not None and vis_body_pose:
-            res_img = draw_arm_pose(res_img, body_pose_list)
+            res_img = draw_arm_pose(res_img, body_pose_list)            
 
         # draw body bbox
         if body_bbox_list is not None:
@@ -111,11 +115,12 @@ class Visualizer(object):
         # render predicted meshes
         if pred_mesh_list is not None:
             rend_img = self.__render_pred_verts(input_img, pred_mesh_list)
+            pose_img = self.__render_pred_verts(pose_img, pred_mesh_list)            
             if rend_img is not None:
-                res_img = np.concatenate((res_img, rend_img), axis=1)
+                res_img = np.concatenate((res_img, rend_img), axis=1)                
             # res_img = rend_img
         
-        return res_img
+        return res_img, pose_img
         
     def __render_pred_verts(self, img_original, pred_mesh_list):
 
@@ -162,9 +167,9 @@ class Visualizer(object):
         if len(meshList)==0:
                # sideImg = cv2.resize(sideImg, (renderImg.shape[1], renderImg.shape[0]) )
             self.renderout  ={}
-            self.renderout['render_camview'] = img_original.copy()
-
             blank = np.ones(img_original.shape, dtype=np.uint8)*255       #generate blank image
+            self.renderout['render_camview'] = img_original.copy()
+            #self.renderout['render_camview'] = blank            
             self.renderout['render_sideview'] = blank
             
             return

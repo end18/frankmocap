@@ -187,11 +187,16 @@ def run_frank_mocap(args, bbox_detector, body_mocap, hand_mocap, visualizer):
         pred_mesh_list = demo_utils.extract_mesh_from_output(pred_output_list)
 
         # visualization
-        res_img = visualizer.visualize(
+        res_img, pose_img = visualizer.visualize(
             img_original_bgr,
-            pred_mesh_list = pred_mesh_list,
-            body_bbox_list = body_bbox_list,
-            hand_bbox_list = hand_bbox_list)
+            pred_mesh_list = pred_mesh_list)
+        
+        #original code
+        #res_img = visualizer.visualize(
+            #img_original_bgr,
+            #pred_mesh_list = pred_mesh_list,
+            #body_bbox_list = body_bbox_list,
+            #hand_bbox_list = hand_bbox_list)
 
        # show result in the screen
         if not args.no_display:
@@ -200,7 +205,7 @@ def run_frank_mocap(args, bbox_detector, body_mocap, hand_mocap, visualizer):
 
         # save result image
         if args.out_dir is not None:
-            demo_utils.save_res_img(args.out_dir, image_path, res_img)
+            demo_utils.save_res_img(args.out_dir, image_path, res_img, pose_img)
 
         # save predictions to pkl
         if args.save_pred_pkl:
